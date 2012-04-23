@@ -57,7 +57,7 @@ def _trace_function(frame, event, arg):
         return retval
 
     # skip modules_to_ignore
-    if any(name.startswith(bad_substr) for bad_substr in global_modules_to_ignore):
+    if name.startswith(global_modules_to_ignore):
         return retval
 
     # get line number
