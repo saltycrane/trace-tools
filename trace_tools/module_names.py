@@ -1,7 +1,7 @@
 import sys
 
 builtin_modules = sys.builtin_module_names
-stdlib_modules = [
+stdlib_modules = (
  'Cookie',
  'Queue',
  'StringIO',
@@ -168,4 +168,7 @@ stdlib_modules = [
  'urlparse',
  'warnings',
  'zipimport',
- 'zlib']
+ 'zlib')
+
+builtin_modules = set(builtin_modules) - set(['__main__'])
+stdlib_modules = set(stdlib_modules) - set(['__main__'])
