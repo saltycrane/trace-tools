@@ -4,6 +4,7 @@
 
 import linecache
 import sys
+import time
 from functools import wraps
 
 from trace_tools.module_names import builtin_modules, stdlib_modules
@@ -36,6 +37,7 @@ global_options = {
     'ignore_stdlib': None,
     'use_stderr': None,
     'ignore_children_of_ignored': None,
+    'timestamp_lines': None,
 }
 
 
@@ -50,6 +52,7 @@ def trace(
     ignore_stdlib=True,
     use_stderr=False,
     ignore_children=True,
+    timestamp_lines=False,
     ):
     """
     :param max_level: (integer) max nested call level
@@ -69,6 +72,7 @@ def trace(
     global_options['ignore_stdlib'] = ignore_stdlib
     global_options['use_stderr'] = use_stderr
     global_options['ignore_children_of_ignored'] = ignore_children
+    global_options['timestamp_lines'] = timestamp_lines
     if start:
         global_options['start_mod'], start_line = start.split(':')
         global_options['start_line'] = int(start_line)
@@ -187,7 +191,14 @@ def _trace_function(frame, event, arg):
         foutput = sys.stderr
     else:
         foutput = sys.stdout
-    prefix = 'level%02d%s>' % (global_level, '-' * global_level)
+
+    if global_options['timestamp_lines']:
+        time_prefix = '%10.2f ' % (time.time())
+    else:
+        time_prefix = ''
+
+    prefix = '%slevel%02d%s>' % (time_prefix, global_level,
+                                 ' -' * global_level)
     if line.strip():
         if global_options['module_only']:
             if name != global_prev_name and event == 'line':
