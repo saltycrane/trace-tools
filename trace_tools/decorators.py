@@ -42,18 +42,18 @@ global_options = {
 
 
 def trace(
-    start=None,
-    end=None,
-    max_level=DEFAULT_MAX_LEVEL,
-    ignore=DEFAULT_MODULES_TO_IGNORE,
-    module_only=False,
-    calls_only=False,
-    ignore_builtins=True,
-    ignore_stdlib=True,
-    use_stderr=False,
-    ignore_children=True,
-    timestamp_lines=False,
-    ):
+        start=None,
+        end=None,
+        max_level=DEFAULT_MAX_LEVEL,
+        ignore=DEFAULT_MODULES_TO_IGNORE,
+        module_only=False,
+        calls_only=False,
+        ignore_builtins=True,
+        ignore_stdlib=True,
+        use_stderr=False,
+        ignore_children=True,
+        timestamp_lines=False,
+):
     """
     :param max_level: (integer) max nested call level
     :param ignore: list/tuple of modules to ignore
@@ -125,15 +125,12 @@ def _trace_function(frame, event, arg):
     # check start/end
     if global_options['start_mod'] and global_options['start_line']:
         if (name == global_options['start_mod'] and
-            lineno == global_options['start_line']
-            ):
+                lineno == global_options['start_line']):
             global_started = True
     if (global_started and
-        global_options['end_mod'] and global_options['end_line']
-        ):
+            global_options['end_mod'] and global_options['end_line']):
         if (name == global_options['end_mod'] and
-            lineno == global_options['end_line']
-            ):
+                lineno == global_options['end_line']):
             global_started = False
     if not global_started:
         return retval
@@ -149,8 +146,7 @@ def _trace_function(frame, event, arg):
 
     # skip children of ignored modules
     if (global_options['ignore_children_of_ignored'] and
-        global_ignore_children_on
-        ):
+            global_ignore_children_on):
         if global_level <= global_ignore_children_start_level:
             global_ignore_children_on = False
         # elif global_level < global_ignore_children_start_level:
@@ -163,9 +159,8 @@ def _trace_function(frame, event, arg):
     # skip builtin modules and stdlib modules
     # skip modules_to_ignore
     if ((global_options['ignore_builtins'] and name in builtin_modules) or
-        (global_options['ignore_stdlib'] and name in stdlib_modules) or
-        name.startswith(global_options['modules_to_ignore'])
-        ):
+            (global_options['ignore_stdlib'] and name in stdlib_modules) or
+            name.startswith(global_options['modules_to_ignore'])):
         if event == 'call':
             global_ignored_call_count += 1
         global_ignore_children_on = True
@@ -177,8 +172,7 @@ def _trace_function(frame, event, arg):
         filename = frame.f_globals["__file__"]
     else:
         filename = 'couldnotdeterminefilename'
-    if (filename.endswith(".pyc") or
-        filename.endswith(".pyo")):
+    if (filename.endswith(".pyc") or filename.endswith(".pyo")):
         filename = filename[:-1]
 
     # get line
