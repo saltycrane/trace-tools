@@ -51,7 +51,7 @@ def trace(
         ignore_builtins=True,
         ignore_stdlib=True,
         use_stderr=False,
-        ignore_children=True,
+        ignore_children=False,
         timestamp_lines=False,
 ):
     """
