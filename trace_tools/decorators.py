@@ -160,7 +160,7 @@ def _trace_function(frame, event, arg):
     # skip modules_to_ignore
     if ((global_options['ignore_builtins'] and name in builtin_modules) or
             (global_options['ignore_stdlib'] and name in stdlib_modules) or
-            name.startswith(global_options['modules_to_ignore'])):
+            name.startswith(tuple(global_options['modules_to_ignore']))):
         if event == 'call':
             global_ignored_call_count += 1
         global_ignore_children_on = True
