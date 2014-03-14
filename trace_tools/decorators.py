@@ -11,7 +11,7 @@ from trace_tools.module_names import builtin_modules, stdlib_modules
 
 
 # global constants
-DEFAULT_MAX_LEVEL = 100
+DEFAULT_MAX_LEVEL = 500
 DEFAULT_MODULES_TO_IGNORE = []
 THIS_MODULE_NAME = 'trace_tools'
 
