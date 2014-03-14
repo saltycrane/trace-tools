@@ -27,6 +27,7 @@ global_ignore_children_start_level = 0
 global_options = {
     'max_level': None,
     'modules_to_ignore': None,
+    'modules_to_keep': None,
     'start_mod': None,
     'start_line': None,
     'end_mod': None,
@@ -46,6 +47,7 @@ def trace(
         end=None,
         max_level=DEFAULT_MAX_LEVEL,
         ignore=DEFAULT_MODULES_TO_IGNORE,
+        keep=None,
         module_only=False,
         calls_only=False,
         ignore_builtins=True,
@@ -57,6 +59,7 @@ def trace(
     """
     :param max_level: (integer) max nested call level
     :param ignore: list/tuple of modules to ignore
+    :param keep: list/tuple of modules to keep ignoring all others
     :param start: e.g. 'suds.client:595'
     :param end: e.g. 'suds.client:596'
     :param ignore_children: ignore calls/lines that are children of
@@ -65,6 +68,7 @@ def trace(
     global global_options
     global global_started
     global_options['modules_to_ignore'] = ignore
+    global_options['modules_to_keep'] = keep
     global_options['max_level'] = max_level
     global_options['module_only'] = module_only
     global_options['calls_only'] = calls_only
@@ -161,6 +165,15 @@ def _trace_function(frame, event, arg):
     if ((global_options['ignore_builtins'] and name in builtin_modules) or
             (global_options['ignore_stdlib'] and name in stdlib_modules) or
             name.startswith(tuple(global_options['modules_to_ignore']))):
+        if event == 'call':
+            global_ignored_call_count += 1
+        global_ignore_children_on = True
+        global_ignore_children_start_level = global_level
+        return retval
+
+    # skip all modules except the modules to keep (if set)
+    if (global_options['modules_to_keep'] and
+            not name.startswith(tuple(global_options['modules_to_keep']))):
         if event == 'call':
             global_ignored_call_count += 1
         global_ignore_children_on = True

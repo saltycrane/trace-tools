@@ -37,3 +37,19 @@ Usage
            ignore_builtins=True, ignore_stdlib=True)
     def process(self, content):
         do_stuff()
+
+    @trace(
+        ignore=[
+            'myapp.noisy',
+        ],
+        keep=[
+            'myapp',
+        ],
+        calls_only=True,
+    )
+    def devserver():
+        do_stuff()
+
+Notes
+-----
+ - When using with a local development web server (e.g. Django, Flask), make sure the auto reloader is disabled.
